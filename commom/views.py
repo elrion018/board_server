@@ -39,9 +39,8 @@ def search_article_list(request):
         return Response(articleSerializer.data)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'POST'])
 def article_detail(request, slug):
-
     try:
         article = Article.objects.get(slug=slug)
     except article.DoesNotExist:
@@ -58,12 +57,14 @@ def article_detail(request, slug):
                 return Response(articleSerializer.data)
             else:
                 return Response(articleSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'DELETE':
-        if int(request.data['password']) == article.password:
-            article.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'POST':
+        articleSerializer = ArticleSerializer(article, data=request.data)
+        if articleSerializer.is_valid():
+            if int(request.data['password']) == article.password:
+                article.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['PUT'])
