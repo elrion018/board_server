@@ -136,7 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
+#d
 
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
